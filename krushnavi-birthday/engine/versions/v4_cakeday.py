@@ -46,7 +46,7 @@ OUT_DIR = os.path.join(SCRATCH, 'out')
 os.makedirs(OUT_DIR, exist_ok=True)
 SAFE = (70, 260, 1010, 1620)
 AUDIO = os.path.join(AUDIO_DIR, 'hb_v4_307.wav')
-PHOTOS_USED = ['p27', 'p26', 'p20', 'p21', 'p22', 'p24', 'p23', 'p25', 'p28', 'p29', 'p30']
+PHOTOS_USED = ['p29', 'p27', 'p26', 'p20', 'p21', 'p22', 'p24', 'p23', 'p25', 'p28', 'p30']
 
 # ----------------------------------------------------------------------------- palette
 CREAM = hexc('#fff6ea')
@@ -222,7 +222,7 @@ SPK_BIG = sparkle_sprite(40, (255, 214, 120, 255))
 
 # ----------------------------------------------------------------------------- INTRO
 INTRO_CARD = Card(800, 930, border=16, radius=44)
-INTRO_SHOT = Shot(27, 1.03, 1.10, focus=(0.485, 0.44), keep='girl')
+INTRO_SHOT = Shot(29, 1.18, 1.30, focus=(0.52, 0.40), keep='girl')   # opens on the marigold garden photo
 INTRO_BALLOONS = ((90, 1340, 0.0, 0), (990, 640, 2.1, 3), (992, 1380, 4.0, 4))     # (x, y, phase, colour)
 
 def intro(dur):
@@ -353,7 +353,9 @@ def finale(dur):
 # ----------------------------------------------------------------------------- timeline
 def build():
     tl = Timeline()
-    tl.add(4.0, intro(4.0), name='intro p27')
+    tl.add(4.0, intro(4.0), name='intro p29')
+    tl.add(3.1, full(Shot(27, 1.0, 1.1), 3.1, 'Birthday girl', 'right', 1555, size=52, icon='star'),
+           trans='push_right', tdur=0.4, name='p27')
     tl.add(2.7, cake(2.7), trans='circle', tdur=0.4, name='cake p26')
     tl.add(2.7, full(Shot(20, 1.0, 1.12), 2.7, 'Cake time!', 'left', 1500, cap_t=0.55), trans='push_left', tdur=0.4, name='p20')
     tl.add(2.75, full(Shot(21, 1.0, 1.16), 2.75, 'Yummy!', 'right', 1500, cap_t=0.5), trans='slide_over', tdur=0.4, name='p21')
@@ -361,8 +363,6 @@ def build():
     tl.add(2.75, full(Shot(23, 1.0, 1.1, p1=(0.03, 0)), 2.75, 'So much love', 'left', 1500), trans='blur', tdur=0.4, name='p23')
     tl.add(3.1, full(Shot(25, 1.05, 1.18), 3.1, 'Mumma & Papa', 'center', 1555, size=60, pink=True), trans='white', tdur=0.4, name='p25')
     tl.add(2.7, full(Shot(28, 1.28, 1.20, focus='all', keep='all', y_bias=0.07), 2.7, 'Sweetest bite', 'right', 1500), trans='slide_up_over', tdur=0.4, name='p28')
-    tl.add(3.1, full(Shot(29, 1.0, 1.1, focus=(0.60, 0.5), keep='girl'), 3.1, 'Our sunshine', 'right', 1555, size=52, icon='star'),
-           trans='push_right', tdur=0.4, name='p29')
     tl.add(6.1, finale(6.1), trans='white', tdur=0.5, name='finale p30')
     return tl
 
