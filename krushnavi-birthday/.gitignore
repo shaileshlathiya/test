@@ -1,0 +1,5 @@
+__pycache__/
+engine/out/
+engine/fonts/
+engine/assets/photos/
+engine/assets/audio/

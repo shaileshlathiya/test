@@ -688,8 +688,9 @@ def _render_segment(tl, f0, f1, path, fps, crf, preset):
         p.stdin.close(); p.wait()
     if p.returncode != 0: raise RuntimeError(f'ffmpeg segment failed: {path}')
 
-def encode(tl, out, audio=None, workers=3, fps=FPS, crf=18, preset='medium', audio_gain=1.0, verbose=True):
-    """Render the timeline to an MP4 (H.264, yuv420p, faststart) with optional audio (wav/m4a path)."""
+def encode(tl, out, audio=None, workers=3, fps=FPS, crf=18, preset='medium', audio_gain=1.0, verbose=True, audio_fade=2.0):
+    """Render the timeline to an MP4 (H.264, yuv420p, faststart) with optional audio (wav/m4a path).
+    audio_fade = length (s) of the final audio fade-out (default 2.0, as before)."""
     n = int(round(tl.duration * fps))
     tmp = tempfile.mkdtemp(prefix='bday_')
     bounds = [int(n * k / workers) for k in range(workers + 1)]
@@ -708,7 +709,7 @@ def encode(tl, out, audio=None, workers=3, fps=FPS, crf=18, preset='medium', aud
     os.makedirs(os.path.dirname(os.path.abspath(out)), exist_ok=True)
     if audio:
         subprocess.run(['ffmpeg', '-hide_banner', '-loglevel', 'error', '-y', '-i', silent, '-i', audio, '-map', '0:v:0', '-map', '1:a:0',
-                        '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-af', f'volume={audio_gain},afade=t=out:st={max(0, tl.duration - 2.0)}:d=2',
+                        '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-af', f'volume={audio_gain},afade=t=out:st={max(0, tl.duration - audio_fade)}:d={audio_fade}',
                         '-shortest', '-movflags', '+faststart', out], check=True)
     else:
         subprocess.run(['ffmpeg', '-hide_banner', '-loglevel', 'error', '-y', '-i', silent, '-c', 'copy', '-movflags', '+faststart', out], check=True)
